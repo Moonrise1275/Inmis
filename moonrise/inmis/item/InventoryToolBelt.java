@@ -8,6 +8,7 @@ public class InventoryToolBelt extends InventoryItemContainer {
 
 	public InventoryToolBelt() {
 		super(6);
+		
 	}
 	
 	public InventoryToolBelt(ItemStack stack) {
@@ -21,7 +22,7 @@ public class InventoryToolBelt extends InventoryItemContainer {
 
 	@Override
 	protected NBTTagCompound saveExtraData(NBTTagCompound tag) {
-		return null;
+		return tag;
 	}
 
 	@Override

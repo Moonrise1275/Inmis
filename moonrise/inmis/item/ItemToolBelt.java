@@ -22,17 +22,13 @@ public class ItemToolBelt extends ItemContainer {
 	
 	@Override
 	public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
+		super.onItemRightClick(item, world, player);
 		
 		int currentSlotNum = player.inventory.currentItem;
 		if (currentSlotNum <8) {
 			ItemStack rightSlotItem = player.inventory.getStackInSlot(currentSlotNum +1);
 			InventoryItemContainer itemInven = this.getInventory(item);
-			//for check
-			System.out.println("Check 2 : " + itemInven.getSizeInventory());
 			ItemStack nextTool = itemInven.getStackInSlot(0);
-			
-			//for check
-			System.out.println("Check 3 : " + itemInven.getSizeInventory());
 			
 			for (int i=1; i<itemInven.getSizeInventory(); i++)
 				itemInven.setInventorySlotContents(i-1, itemInven.getStackInSlot(i));
@@ -45,6 +41,8 @@ public class ItemToolBelt extends ItemContainer {
 
 	@Override
 	public InventoryItemContainer getInventory() {
+		InventoryToolBelt result = new InventoryToolBelt();
+		
 		return new InventoryToolBelt();
 	}
 
@@ -57,12 +55,12 @@ public class ItemToolBelt extends ItemContainer {
 	public int getGuiId() {
 		return Inmis.GUI_TOOLBELT;
 	}
-	
+
 	@Override
-	public void getSubItems(int id, CreativeTabs tab, List list) {
-		ItemStack itemstack = new ItemStack(id, 1, 0);
-		ItemContainer.createNBT(itemstack);
-		list.add(itemstack);
+	public ItemStack createNewItem(ItemStack stack) {
+		NBTTagCompound tag = createNBT(stack);
+		InventoryToolBelt inventory = new InventoryToolBelt();
+		return setTagToStack(stack, inventory.writeToNBT(tag));
 	}
 
 }

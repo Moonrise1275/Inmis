@@ -4,6 +4,7 @@ import moonrise.inmis.Inmis;
 import moonrise.inmis.gui.ContainerInvHopper;
 import moonrise.inmis.gui.ContainerToolBelt;
 import moonrise.inmis.gui.GuiInvHopper;
+import moonrise.inmis.gui.GuiToolBelt;
 import moonrise.inmis.item.InventoryInvHopper;
 import moonrise.inmis.item.InventoryToolBelt;
 import moonrise.inmis.item.ItemInventoryHopper;
@@ -43,6 +44,12 @@ public class GuiHandler implements IGuiHandler {
 			if (!((invHopper.getItem()) instanceof ItemInventoryHopper))
 				return null;
 			return new GuiInvHopper(player.inventory, new InventoryInvHopper(invHopper));
+		}
+		else if (ID == Inmis.GUI_TOOLBELT) {
+			ItemStack toolBelt = player.getCurrentEquippedItem();
+			if (!(toolBelt.getItem() instanceof ItemToolBelt))
+				return null;
+			return new GuiToolBelt(player.inventory, new InventoryToolBelt(toolBelt));
 		}
 		
 		return null;

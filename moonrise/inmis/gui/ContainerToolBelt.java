@@ -21,9 +21,11 @@ public class ContainerToolBelt extends Container {
 		for (int i=0; i<itemInventory.getSizeInventory(); i++)
 			this.addSlotToContainer(new Slot(this.itemInventory, i, 35 + i*18, 18));
 		//Draw player's non-quickslot inventory
-		for (int i=0; i<3; i++)
-			for (int j=0; i<9; j++)
+		for (int i=0; i<3; i++) {
+			for (int j=0; i<9; j++) {
 				this.addSlotToContainer(new Slot(this.playerInventory, j + i*9 + 9, 8 + j*18, 49 + i*18));
+			}
+		}
 		//Draw player's quickslot inventory
 		for (int i=0; i<9; i++)
 			this.addSlotToContainer(new Slot(this.playerInventory, i, 8 + i*18, 107));

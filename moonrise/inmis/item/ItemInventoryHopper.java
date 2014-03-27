@@ -50,12 +50,11 @@ public class ItemInventoryHopper extends ItemContainer {
 	public int getGuiId() {
 		return Inmis.GUI_INVHOPPER;
 	}
-	
-	@Override
-	public void getSubItems(int id, CreativeTabs tab, List list) {
-		ItemStack itemstack = new ItemStack(id, 1, 0);
-		ItemContainer.createNBT(itemstack);
-		list.add(itemstack);
-	}
 
+	@Override
+	public ItemStack createNewItem(ItemStack stack) {
+		// TODO Auto-generated method stub
+		return stack;
+	}
+	
 }

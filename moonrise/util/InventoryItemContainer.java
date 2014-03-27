@@ -75,8 +75,8 @@ public abstract class InventoryItemContainer implements IInventory {
 	protected abstract void loadExtraData(NBTTagCompound tag);
 	
 	/**
-	 * If you want to use anouther field for store your inventory's information, that field may not be loaded automatically
-	 * So you can use this method to load your extra data
+	 * If you want to use another field for store your inventory's information, that field may not be loaded automatically.
+	 * So you can use this method to load your extra data.
 	 * Also you should implements loadExtraData(NBTTgaCompound) method. 
 	 * 
 	 * @param tag 

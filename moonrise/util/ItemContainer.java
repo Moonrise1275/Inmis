@@ -1,5 +1,8 @@
 package moonrise.util;
 
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -50,12 +53,13 @@ public abstract class ItemContainer extends Item {
 	 * @return itemstack's inventory
 	 */
 	public InventoryItemContainer getInventory(ItemStack stack) {
-		return this.getInventory().readFromNBT(createNBT(stack));
+		InventoryItemContainer result = this.getInventory().readFromNBT(createNBT(stack));
+		return result;
 	}
 	
 	@Override
 	public void onCreated(ItemStack itemstack, World world, EntityPlayer player) {
-		createNBT(itemstack);
+		createNewItem(itemstack);
 	}
 	
 	@Override
@@ -75,6 +79,30 @@ public abstract class ItemContainer extends Item {
 			stack.getTagCompound().setCompoundTag("inventory", new NBTTagCompound());
 		}
 		return stack.getTagCompound().getCompoundTag("inventory");
+	}
+	
+	public static ItemStack setTagToStack(ItemStack stack, NBTTagCompound tag) {
+		createNBT(stack);
+		stack.getTagCompound().setCompoundTag("inventory", tag);
+		return stack;
+	}
+	
+	/**
+	 * This method is called whenever a new itemstack of this item is created.
+	 * You should set given itemstack's nbt data.
+	 * To get proper nbt tag, use createNBT(ItemStack)
+	 * 
+	 * @param stack : given itemstack
+	 * @return processed itemstack
+	 */
+	public abstract ItemStack createNewItem(ItemStack stack);
+	
+	@Override
+	public void getSubItems(int id, CreativeTabs tab, List list) {
+		
+		ItemStack itemstack = new ItemStack(id, 1, 0);
+		list.add(createNewItem(itemstack));
+		
 	}
 	
 }
