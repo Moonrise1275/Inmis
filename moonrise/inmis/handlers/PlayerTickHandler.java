@@ -28,28 +28,7 @@ public class PlayerTickHandler implements ITickHandler {
 	
 	private void playerTick(EntityPlayer player) {
 		
-		Scoreboard board = player.getWorldScoreboard();
-
-		if (QChangeKeyHandler.keyPressed) {
-
-			ItemStack[] inventory = player.inventory.mainInventory;
-			ItemStack[] buffer = new ItemStack[9];
-			
-			for (int i=0; i<9; i++)
-				buffer[i] = inventory[i+27];
-			for (int i=0; i<9; i++)
-				inventory[i+27] = inventory[i+18];
-			for (int i=0; i<9; i++)
-				inventory[i+18] = inventory[i+9];
-			for (int i=0; i<9; i++)
-				inventory[i+9] = inventory[i];
-			for (int i=0; i<9; i++)
-				inventory[i] = buffer[i];
-			
-			player.inventory.mainInventory = inventory;
-			
-			QChangeKeyHandler.keyPressed = false;
-		}
+		QChangeKeyHandler.QSlotChange(player);
 		
 		
 		

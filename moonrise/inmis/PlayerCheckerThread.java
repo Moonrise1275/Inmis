@@ -2,16 +2,21 @@ package moonrise.inmis;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,12 +32,29 @@ import net.minecraft.world.World;
 public class PlayerCheckerThread extends Thread {
 	
 	private boolean isRunning = true;
-	private Map<String, PlayerContainer> mapPlayer;
+	public Map<String, PlayerContainer> mapPlayer;
 	final File fileInmisPlayers = new File("InmisPlayers.bin");
+	
+	public PlayerCheckerThread() {
+		this.mapPlayer = new TreeMap<String, PlayerContainer>();
+	}
 	
 	@Override
 	public void run() {
-		
+		/*
+		try {
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(new FileReader(new File("InmisPlayerInfo.txt")));
+		while (true) {
+			String message = br.readLine();
+			if (message == null)
+				break;
+			System.out.println(message);
+		};
+		} catch (IOException e) {
+				e.printStackTrace();
+		}
+		*/
 		System.out.println("[Inmis] PlayerCheckerThread activated");
 		if (fileInmisPlayers.exists()) {
 			try {
@@ -47,7 +69,7 @@ public class PlayerCheckerThread extends Thread {
 				e.printStackTrace();
 			}
 		} else {
-			this.mapPlayer = new HashMap<String, PlayerContainer>();
+			this.mapPlayer = new TreeMap<String, PlayerContainer>();
 		}
 		
 		while (isRunning) {
@@ -57,34 +79,39 @@ public class PlayerCheckerThread extends Thread {
 			long curTime = System.currentTimeMillis();
 			SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss");
 			String curDate = date.format(new Date(curTime));
-			System.out.println("[Inmis] " + curDate);
+			//System.out.println("[Inmis] " + curDate);
 			
 			try {
 				for (Object obj : world.playerEntities) {
 					EntityPlayer player = (EntityPlayer)obj;
 					addPlayTime(player.username, curDate);
-					System.out.println("[Inmis] " + player.username);
+					//System.out.println("[Inmis] " + player.username);
 				}
-			} catch (NullPointerException e) {}
+			} catch (NullPointerException e) { 
+				e.printStackTrace(); 
+			}
 			
 			try {
 				sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			//System.out.println(mapPlayer);
 		}
 		System.out.println("[Inmis] PlayerCheckerThread deactivated");
 		
+		printPlayerInfo();
+
 		try {
 			@SuppressWarnings("resource")
-			ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fileInmisPlayers)));
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileInmisPlayers));
 			out.writeObject(mapPlayer);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		printPlayerInfo();
 		
 		System.out.println("[Inmis] PlayerCheckerThread closed");
 	}
@@ -120,18 +147,14 @@ public class PlayerCheckerThread extends Thread {
 		System.out.println("[Inmis] Saving to InmisPlayerInfo.txt");
 		
 		File filePlayerInfo = new File("InmisPlayerInfo.txt");
-		filePlayerInfo.deleteOnExit();
 		try {
-			@SuppressWarnings("resource")
-			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(filePlayerInfo)));
-			for (String name : mapPlayer.keySet()) {
-				for (String str : mapPlayer.get(name).toArray()) {
-					writer.println(str);
-				}
+			PrintWriter writer = new PrintWriter(new FileWriter(filePlayerInfo));
+			for (PlayerContainer player : this.mapPlayer.values()) {
+				writer.println(player);
 			}
+			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

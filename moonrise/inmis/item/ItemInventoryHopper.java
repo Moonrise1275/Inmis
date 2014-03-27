@@ -1,32 +1,61 @@
 package moonrise.inmis.item;
 
+import java.util.List;
+
 import moonrise.inmis.Inmis;
-import net.minecraft.entity.Entity;
+import moonrise.util.InventoryItemContainer;
+import moonrise.util.ItemContainer;
+import moonrise.util.Util;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class ItemInventoryHopper extends Item {
+public class ItemInventoryHopper extends ItemContainer {
 	
-	int upgradeCount = 0;
-	int maxUpgradeCount;
+	final int maxUpgrade;
 
-	public ItemInventoryHopper(int par1, int maxUpgrade) {
-		super(par1);
-		setCreativeTab(Inmis.tabInmis);
-		setMaxStackSize(1);
-		setHasSubtypes(true);
-		
-		this.maxUpgradeCount = maxUpgrade;
+	public ItemInventoryHopper(int id, int maxUpgrade) {
+		super(id);
+		this.maxUpgrade = maxUpgrade;
+		this.setCreativeTab(Inmis.tabInmis);
+		this.setMaxStackSize(1);
 	}
 	
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
-		EntityPlayer player = (EntityPlayer)entity;
+	public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
+		super.onItemRightClick(item, world, player);
 		
+		if (!player.isSneaking()) {
+			
+		}
 		
-		
+		return item;
+	}
+	
+	@Override
+	public InventoryItemContainer getInventory() {
+		return new InventoryInvHopper();
+	}
+
+	@Override
+	public Object getModInstance() {
+		return Inmis.instance;
+	}
+
+	@Override
+	public int getGuiId() {
+		return Inmis.GUI_INVHOPPER;
+	}
+	
+	@Override
+	public void getSubItems(int id, CreativeTabs tab, List list) {
+		ItemStack itemstack = new ItemStack(id, 1, 0);
+		ItemContainer.createNBT(itemstack);
+		list.add(itemstack);
 	}
 
 }
