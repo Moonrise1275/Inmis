@@ -1,24 +1,24 @@
-package moonrise.inmis.handlers;
+package moonrise.inmis.handler;
 
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.scoreboard.Scoreboard;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
-public class PlayerTickHandler implements ITickHandler {
+public class InmisPlayerTickHandler implements ITickHandler {
 	
-	private final EnumSet<TickType> ticksToGet;
+	private EnumSet<TickType> ticksToGet;
+	private InmisKeyHandler keyhandler;
 	
-	public PlayerTickHandler(EnumSet<TickType> ticksToGet) {
-		this.ticksToGet = ticksToGet;
+	public InmisPlayerTickHandler(EnumSet<TickType> ticktype, InmisKeyHandler keyhandler) {
+		this.ticksToGet = ticktype;
+		this.keyhandler = keyhandler;
 	}
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		playerTick((EntityPlayer)tickData[0]);
+		this.playerTick((EntityPlayer)tickData[0]);
 	}
 
 	@Override
@@ -27,21 +27,17 @@ public class PlayerTickHandler implements ITickHandler {
 	}
 	
 	private void playerTick(EntityPlayer player) {
-		
-		QChangeKeyHandler.QSlotChange(player);
-		
-		
-		
+		this.keyhandler.processKey(player);
 	}
 
 	@Override
 	public EnumSet<TickType> ticks() {
-		return ticksToGet;
+		return this.ticksToGet;
 	}
 
 	@Override
 	public String getLabel() {
-		return "InmisPlayerTick";
+		return "InmisPlayerTickHandler";
 	}
 
 }

@@ -2,6 +2,8 @@ package moonrise.inmis.proxy;
 
 public class CommonProxy {
 	
-	public void keyBind() {}
+	public void bindKeys() {
+		
+	}
 
 }

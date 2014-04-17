@@ -2,8 +2,6 @@ package moonrise.inmis.proxy;
 
 import java.util.EnumSet;
 
-import moonrise.inmis.handlers.PlayerTickHandler;
-import moonrise.inmis.handlers.QChangeKeyHandler;
 import net.minecraft.client.settings.KeyBinding;
 
 import org.lwjgl.input.Keyboard;
@@ -12,15 +10,21 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import moonrise.inmis.EnumInmisKeys;
+import moonrise.inmis.handler.InmisKeyHandler;
+import moonrise.inmis.handler.InmisPlayerTickHandler;
+import moonrise.inmis.proxy.CommonProxy;
 
 public class ClientProxy extends CommonProxy {
 	
-	@Override
-	public void keyBind() {
-		KeyBinding[] keys = {new KeyBinding("Quick slot change key", Keyboard.KEY_Z)};
-		boolean[] repeats = {false};
-		KeyBindingRegistry.registerKeyBinding(new QChangeKeyHandler(keys, repeats));
-		TickRegistry.registerTickHandler(new PlayerTickHandler(EnumSet.of(TickType.PLAYER)), Side.SERVER);
+	public void bindKeys() {
+		KeyBinding[] keys = {new KeyBinding(EnumInmisKeys.RotateInventory.name(), Keyboard.KEY_Z),
+							 new KeyBinding(EnumInmisKeys.OpenInmisInventory.name(), Keyboard.KEY_X),
+							 new KeyBinding(EnumInmisKeys.ChangeArmor.name(), Keyboard.KEY_C)};
+		boolean[] repeats = {false, false, false};
+		InmisKeyHandler keyhandler = new InmisKeyHandler(keys, repeats);
+		KeyBindingRegistry.registerKeyBinding(keyhandler);
+		TickRegistry.registerTickHandler(new InmisPlayerTickHandler(EnumSet.of(TickType.PLAYER), keyhandler), Side.CLIENT);
 	}
 
 }

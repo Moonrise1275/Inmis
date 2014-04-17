@@ -1,4 +1,4 @@
-package moonrise.util;
+package moonrise.inmis.util;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 public class Util {
 	
 	public static boolean isOp(ICommandSender sender) {
-		return MinecraftServer.getServerConfigurationManager(MinecraftServer.getServer()).getOps().contains(sender);
+		return MinecraftServer.getServerConfigurationManager(MinecraftServer.getServer()).getOps().contains(sender) || !(sender instanceof EntityPlayer);
 	}
 	
 	public static EntityPlayer getPlayer(String username) {
@@ -22,13 +22,6 @@ public class Util {
 	public static ChatMessageComponent newCMC(String message) {
 		return new ChatMessageComponent().setColor(EnumChatFormatting.AQUA).addText(message);
 	}
-	/*
-	public static ChatMessageComponent newCMC(String[] messages) {
-		ChatMessageComponent chat = new ChatMessageComponent().setColor(EnumChatFormatting.AQUA);
-		for (String message : messages)
-			chat.addText(message).;
-		return chat;
-	}*/
 	
 	public static void broadcastMessage(String[] messages) {
 		ChatMessageComponent chat = new ChatMessageComponent().setColor(EnumChatFormatting.LIGHT_PURPLE);
